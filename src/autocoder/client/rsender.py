@@ -60,6 +60,18 @@ class RSender():
             }
         )
 
+
+# wait until the server is running
+import time
+while True:
+    try:
+        response = requests.get("http://localhost:8000")
+        if response.status_code == 200:
+            break
+    except requests.exceptions.ConnectionError:
+        print("Server not running yet. Waiting...")
+        time.sleep(1)
+
 sender = RSender()
 #z = sender.find("Install nodejs")
 #print(z)
@@ -93,7 +105,7 @@ def setup():
 
     z = sender.text("code -a --no-sandbox /project\n")
     print(z)
-    time.sleep(1)
+    time.sleep(3)
 
     # set focus on cline
     # error sending multiple commands ??
@@ -108,19 +120,34 @@ def set_theme():
     sender.text("Dark+ (default dark)")
     time.sleep(1)
 
-def send_task():
-    c = sender.click("Type your task")
+def send_task(task):
+    # Type your task here.
+    # ype your task here.
+    task_text = "your task here."
+    c = sender.click(task_text)
     print(c)
 
-    task = """
-    - A cli tool that fetches data from a google sheet.
-    - The data should be stored in a json file.
-    - You can pass the google sheet url as an argument to the cli tool.
-
-    """
     t = sender.text(task)
     print(t)
 
-setup()
-time.sleep(2)
-send_task()
+
+# check the cli options for --setup
+import sys
+if "--setup" in sys.argv:
+    setup()
+    time.sleep(2)
+    exit(0)
+
+# read the task from a file provided as an argument
+# by default it is named task-file
+
+# read task from a file task.md
+task_file = "task.md"
+# open task_file
+task = None
+with open(task_file, "r", encoding="utf-8") as f:
+    task = f.read()
+
+if (task):
+    print("task read from file")
+    send_task(task+"\n")

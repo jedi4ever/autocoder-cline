@@ -60,8 +60,11 @@ Highly experimental for now !!
 - `make vscode-build-all`
 - `make docker-build`
 - `make docker`
-- `make server`
-- `make run`
+
+- connect to running vscode `http://localhost:6901/`
+
+- `make server` in a separate shell
+- `make run` to invoke the first
 
 
 # License

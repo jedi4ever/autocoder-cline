@@ -199,6 +199,16 @@ app = FastAPI(
 # WARNING:  Unsupported upgrade request.
 # WARNING:  No supported WebSocket library detected. Please use "pip install 'uvicorn[standard]'", or install 'websockets' or 'wsproto' manually.
 
+@app.get("/")
+async def root():
+    """
+    Root endpoint that returns a welcome message.
+    
+    Returns:
+        dict: A welcome message
+    """
+    return {"message": "Welcome to the AutocoderD API!"}
+
 @app.post("/text", response_model=TextCommandResponse)
 async def text_command(command: TextCommand) -> TextCommandResponse:
     """

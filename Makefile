@@ -88,9 +88,12 @@ docker-clean:
 # disable vnc -e VNCOPTIONS=-disableBasicAuth
 # port 3710 - VSCode Remote plugin
 # port 6901 - VNC
-# port 8000 - Autocoder server
+# port 8000 - Autocoder 
+# add -i to make it work in interactive mode
+# add -d to run it in the background
+
 docker:
-	docker run --name $(CONTAINER_NAME) -v `pwd`/$(WORKSPACES_DIR)/$(PROJECT_NAME):/project \
+	docker run -d -i --name $(CONTAINER_NAME) -v `pwd`/$(WORKSPACES_DIR)/$(PROJECT_NAME):/project \
 	 -v `pwd`/scripts:/scripts -v `pwd`/dist/vsix:/vsix -v `pwd`/src/autocoder:/autocoder\
 	 --rm -it --shm-size=512m \
 	 -p 3710:3710 -p 6901:6901 -p 8000:8000 \
@@ -111,12 +114,21 @@ shell:
 server: autocoderd
 
 # We kill the server first , this because Docker does not handle Ctrl-C correctly with init 1
+# with - we ignore the error of the kill command
 autocoderd:
-	docker exec $(CONTAINER_NAME) pkill python3
+	sleep 4
+	-docker exec $(CONTAINER_NAME) pkill python3
 	docker exec $(CONTAINER_NAME) .local/bin/uv run --project autogui_env /autocoder/server/autocoderd.py
 
-run:
+clean:
+	rm -rf ./$(WORKSPACES_DIR)/$(PROJECT_NAME)/
+	mkdir ./$(WORKSPACES_DIR)/$(PROJECT_NAME)/
+
+task: # task task.md
 	uv run --with requests src/autocoder/client/rsender.py
+
+setup:
+	uv run --with requests src/autocoder/client/rsender.py --setup
 
 #run:
 #	open http://localhost:6901
@@ -127,3 +139,23 @@ run:
 
 #daemon:
 #	docker exec $(CONTAINER_NAME) /scripts/start-autocoderd.sh
+
+# needs brew install parallel
+start:
+	nohup make docker &
+	sleep 2
+	make autocoderd &
+	sleep 1
+	open http://localhost:6901
+	make setup
+
+kill:
+	docker kill $(CONTAINER_NAME)
+
+start-clean:
+	make clean
+	make start
+
+shot:
+	make start-clean
+	make task

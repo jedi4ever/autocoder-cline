@@ -3,3 +3,5 @@ vscode-plugins.ok/
 dist/
 workspaces/
 .vscode/
+nohup.out
+task.md
