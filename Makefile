@@ -81,6 +81,9 @@ docker-run-kasm:
 docker-build:
 	docker build -t $(CONTAINER_IMAGE_NAME) .
 
+docker-build-clean:
+	docker build --no-cache -t $(CONTAINER_IMAGE_NAME) .
+
 docker-clean:
 	docker rm -f $(CONTAINER_NAME) || true
 	docker rmi $(CONTAINER_IMAGE_NAME) || true
@@ -159,3 +162,7 @@ start-clean:
 shot:
 	make start-clean
 	make task
+
+cycle:
+	make vscode-cline-build-linux
+	make docker-build

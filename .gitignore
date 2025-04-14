@@ -5,3 +5,4 @@ workspaces/
 .vscode/
 nohup.out
 task.md
+.env

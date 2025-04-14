@@ -94,10 +94,34 @@ def setup():
     r = sender.hotkey("ctrl", "w")
     print(r)
 
-    # setup anthropic
-    v = sender.vscode("cline.patrick")
-    print(v)
     time.sleep(1)
+    settings = [
+        "cline.autocoder.yoloMode",
+        "cline.autocoder.disableNotifications",
+        "cline.autocoder.enableAnthropicProvider",
+        "cline.autocoder.setInstructions",
+        "cline.autocoder.disableTelemetry"
+    ]
+    for i in settings:
+        r = sender.vscode(i)
+        print(r)
+        time.sleep(1)
+
+    v = sender.vscode("cline.autocoder.setAnthropicKey")
+    time.sleep(1)
+
+    #import os
+    #api_key = os.environ.get("ANTHROPIC_API_KEY")
+    api_key = "sk-"
+    s = sender.text(api_key+"\n")
+    print(s)
+    time.sleep(1)
+    v = sender.vscode("cline.autocoder.setAnthropicModel")
+    time.sleep(1)
+    s = sender.text("claude-3-5-sonnet-20241022\n")
+
+    # cline.autocoder.setAnthropicModel
+    # cline.autocoder.setAnthropicKey
 
     v = sender.vscode("workbench.action.terminal.new")
     print(v)
@@ -150,4 +174,6 @@ with open(task_file, "r", encoding="utf-8") as f:
 
 if (task):
     print("task read from file")
-    send_task(task+"\n")
+    done_text = """As a final instruction. When you have built the code according to the instructions, create a file done.txt. But only if you are finished.
+"""
+    send_task( task+"\n "+done_text +"\n")

@@ -405,76 +405,131 @@ export function activate(context: vscode.ExtensionContext) {
 	//	prompt: 'Enter the ticket number'
     //}).then(ticketNumber => {
 
-	// trial patrick
+	// set Anthropic apiKey
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.patrick", async() => {
+		vscode.commands.registerCommand("cline.autocoder.setAnthropicKey", async () => {
+			let apiKey = await vscode.window.showInputBox({ prompt : "Anthropic Key ", password : true }).then(keyEntered => {
+				return keyEntered || ""
+			})
+			await context.secrets.store('apiKey', apiKey); //Save a keys
+			// after settings are updated, post state to webview
+			await sidebarWebview.controller.postStateToWebview()
+			await sidebarWebview.controller.postMessageToWebview({ type: "didUpdateSettings" })
+			
+		})
+	)
 
-			vscode.window.showInputBox({ prompt : "what is your name ? "}).then(name => {
-				console.log(name)
+	// enable Anthropic provider
+	context.subscriptions.push(
+		vscode.commands.registerCommand("cline.autocoder.enableAnthropicProvider", async () => {
+			await context.globalState.update("apiProvider", "anthropic")
+			// after settings are updated, post state to webview
+			await sidebarWebview.controller.postStateToWebview()
+			await sidebarWebview.controller.postMessageToWebview({ type: "didUpdateSettings" })
+			
+		})
+	)
+
+	// enable Anthropic model
+	context.subscriptions.push(
+		vscode.commands.registerCommand("cline.autocoder.setAnthropicModel", async () => {
+			let modelId = await vscode.window.showInputBox({ prompt : "Anthropic Model" }).then(modelEntered => {
+				return modelEntered || ""
 			})
 
-			Logger.log("Patrick information")
-			let information = "some information about keys"
+			// claude-3-7-sonnet-20250219
+			// claude-3-5-haiku-20241022
 
+			await context.globalState.update("apiModelId", modelId)
+			// after settings are updated, post state to webview
+			await sidebarWebview.controller.postStateToWebview()
+			await sidebarWebview.controller.postMessageToWebview({ type: "didUpdateSettings" })
+			
+		})
+	)
+	
+	// disable telemetry
+	context.subscriptions.push(
+		vscode.commands.registerCommand("cline.autocoder.disableTelemetry", async () => {
+			await context.globalState.update("telemetrySetting", false)
+			// after settings are updated, post state to webview
+			await sidebarWebview.controller.postStateToWebview()
+			await sidebarWebview.controller.postMessageToWebview({ type: "didUpdateSettings" })
+		})
+	)
+
+	// disable notification
+	context.subscriptions.push(
+		vscode.commands.registerCommand("cline.autocoder.disableNotifications", async () => {
+			await context.globalState.update("lastShownAnnouncementId","april-11-2025")
+			// after settings are updated, post state to webview
+			await sidebarWebview.controller.postStateToWebview()
+			await sidebarWebview.controller.postMessageToWebview({ type: "didUpdateSettings" })
+		})
+	)
+
+		
+	// set instructions
+	context.subscriptions.push(
+		vscode.commands.registerCommand("cline.autocoder.setInstructions", async () => {
 			let instructions = "Use nodejs and typescript. Make sure to also write tests. Add documentation . Make sure to use type safe. Install nodejs if needed. "
 			await context.globalState.update("customInstructions",instructions)
-			await context.globalState.update("telemetrySetting", false)
-			let custom_instructions = await context.globalState.get("customInstructions")
+
+			// after settings are updated, post state to webview
+			await sidebarWebview.controller.postStateToWebview()
+			await sidebarWebview.controller.postMessageToWebview({ type: "didUpdateSettings" })
+		})
+	)
+	
+	// all auto approval
+	context.subscriptions.push(
+		vscode.commands.registerCommand("cline.autocoder.yoloMode", async () => {
+		// configure auto approval
+		let settings: AutoApprovalSettings = {
+			enabled: true,
+			actions: {
+				readFiles: true,
+				readFilesExternally: false,
+				editFiles: true,
+				editFilesExternally: true,
+				executeSafeCommands: true,
+				executeAllCommands: true,
+				useBrowser: false,
+				useMcp: true,
+			},
+			maxRequests: 25,
+			enableNotifications: false,
+		}
+		context.globalState.update("autoApprovalSettings",settings)
+	
+		// after settings are updated, post state to webview
+		await sidebarWebview.controller.postStateToWebview()
+		await sidebarWebview.controller.postMessageToWebview({ type: "didUpdateSettings" })
+		})
+	)
+
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand("cline.autocoder.copySettings", async() => {
+
+			Logger.log("Copying cline information")
+			let information = ""
 
 			let keys = context.globalState.keys()
 			let ws_keys = context.workspaceState.keys()
-
-			// set the key here
-			let anthropic_key= "my-anthropic-key"
-			await context.secrets.store('apiKey', anthropic_key); //Save a secret
-
-			// needs async
-			let api_provider = await context.globalState.get("apiProvider")
-			let api_key = await context.secrets.get("apiKey")
-			
-			// claude-3-7-sonnet-20250219
-			// claude-3-5-haiku-20241022|
-			let api_model_id = await context.globalState.get("apiModelId")
-			await context.globalState.update("apiModelId","claude-3-5-sonnet-20241022")
-			//let api_model_id = await context.globalState.get("previousModeModelId")
-
-			// disable telemetry
-			await sidebarWebview.controller.updateTelemetrySetting("disabled")
-
-			// lastShownAnnouncementId:april-11-2025
-			await context.globalState.update("lastShownAnnouncementId","april-11-2025")
-
-
-			// configure auto approval
-			let settings: AutoApprovalSettings = {
-				enabled: true,
-				actions: {
-					readFiles: true,
-					readFilesExternally: false,
-					editFiles: true,
-					editFilesExternally: true,
-					executeSafeCommands: true,
-					executeAllCommands: true,
-					useBrowser: false,
-					useMcp: true,
-				},
-				maxRequests: 25,
-				enableNotifications: false,
-						}
-			context.globalState.update("autoApprovalSettings",settings)
-
-			// let api_key = "some key"
-			information = information + [ws_keys, keys, custom_instructions, api_provider, api_model_id, api_key].join("|")
 
 			keys.forEach( (key) => {
 				let value =  context.globalState.get(key)
 				information = information + "(" + key + ":" + value + ")"
 			});
-			
 
-			// after settings are updated, post state to webview
-			await sidebarWebview.controller.postStateToWebview()
-			await sidebarWebview.controller.postMessageToWebview({ type: "didUpdateSettings" })
+			ws_keys.forEach( (key) => {
+				let value =  context.globalState.get(key)
+				information = information + "(" + key + ":" + value + ")"
+			});
+
+			let api_key = await context.secrets.get("apiKey")
+			information = information + "(" + "apiKey" + ":" + api_key + ")"
 
 			vscode.env.clipboard.writeText(information)
 
