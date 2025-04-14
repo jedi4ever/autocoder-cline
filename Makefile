@@ -28,6 +28,8 @@ vscode-repo-clone:
 vscode-repo-patch:
 	@echo "Patching dirs"
 	cp $(PLUGIN_PATCHES_DIR)/cline/src/extension.ts $(PLUGIN_SRC_DIR)/cline/src/extension.ts
+	cp $(PLUGIN_PATCHES_DIR)/package.json $(PLUGIN_SRC_DIR)/cline/package.json
+
 	cp $(PLUGIN_PATCHES_DIR)/vscode-remote-control/src/extension.ts $(PLUGIN_SRC_DIR)/vscode-remote-control/src/extension.ts
 	cp $(PLUGIN_PATCHES_DIR)/vscode-remote-control/package.json $(PLUGIN_SRC_DIR)/vscode-remote-control/package.json
 
