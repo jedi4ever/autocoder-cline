@@ -1,0 +1,111 @@
+{
+  "name": "vscode-remote-control",
+  "displayName": "Remote Control",
+  "description": "This extension allows you to remotely control Visual Studio Code. Run commands from anywhere you want on your device. The extension allows you to take VSCode automation to the next level.",
+  "publisher": "eliostruyf",
+  "license": "MIT",
+  "version": "1.8.0",
+  "engines": {
+    "vscode": "^1.62.0"
+  },
+  "badges": [
+    {
+      "description": "version",
+      "url": "https://img.shields.io/github/package-json/v/estruyf/vscode-remote-control?color=green&label=vscode-remote-control&style=flat-square",
+      "href": "https://github.com/estruyf/vscode-remote-control"
+    },
+    {
+      "description": "Buy me a coffee",
+      "url": "https://img.shields.io/badge/Buy%20me%20a%20coffee-€%203-blue?logo=buy-me-a-coffee&style=flat-square",
+      "href": "https://www.buymeacoffee.com/zMeFRy9"
+    }
+  ],
+  "icon": "assets/logo.png",
+  "galleryBanner": {
+    "color": "#132136",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/estruyf/vscode-remote-control"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Remote Control: Configuration",
+      "properties": {
+        "remoteControl.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Specifies if you want enable/disable the remote control globally or for a workspace."
+        },
+        "remoteControl.port": {
+          "type": "number",
+          "default": 3710,
+          "description": "Specifies the port on which the websocket server will start. If you are using multiple VSCode instances, it is best to set this in your workspace settings."
+        },
+        "remoteControl.host": {
+          "type": "string",
+          "default": "127.0.0.1",
+          "description": "Specifies the host to which the websocket server will bind."
+        },
+        "remoteControl.fallbacks": {
+          "type": "array",
+          "default": [],
+          "description": "Allows you to specify fallback ports when the main one is taken."
+        },
+        "remoteControl.onlyWhenInFocus": {
+          "type": "boolean",
+          "default": false,
+          "description": "Allows you to broadcast commands to all VSCode instances and only the one with focus will execute it."
+        }
+      },
+      "commands": [
+        {
+          "command": "remoteControl.openSettings",
+          "title": "Remote Control: Open settings"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "test-compile": "tsc -p ./",
+    "test-watch": "tsc -watch -p ./",
+    "pretest": "npm run test-compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.0.4",
+    "@types/node": "^12.11.7",
+    "@types/tcp-port-used": "^1.0.0",
+    "@types/vscode": "^1.55.0",
+    "@types/ws": "7.4.1",
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
+    "@typescript-eslint/parser": "^4.14.1",
+    "eslint": "^7.19.0",
+    "glob": "^7.1.6",
+    "mocha": "^8.2.1",
+    "ts-loader": "^8.0.14",
+    "typescript": "^4.1.3",
+    "vscode-test": "^1.5.0",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^5.1.4",
+    "ws": "^7.5.3"
+  },
+  "dependencies": {
+    "@vscode/vsce": "^3.3.2",
+    "tcp-port-used": "^1.0.2"
+  }
+}

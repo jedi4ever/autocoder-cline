@@ -1,0 +1,38 @@
+Docker vscode - 
+https://github.com/pubkey/vscode-in-docker/blob/master/run.bash
+
+
+https://github.com/kasmtech/workspaces-images/blob/develop/dockerfile-kasm-vs-code
+
+
+https://github.com/kasmtech/KasmVNC/wiki/API
+
+http://mamykin.com/posts/running-x-apps-on-mac-with-docker/
+
+
+https://github.com/mkloubert/vs-rest-api
+
+
+# https://github.com/kasmtech/KasmVNC/wiki/API
+curl -u 'kasm_user:password' https://localhost:6901/api/get_bottleneck_stats -k 
+
+https://github.com/kasmtech/KasmVNC/wiki/API#get-screenshot
+
+Needs a login 
+
+curl -u 'kasm_user:password' https://localhost:6901/api/get_screenshot -k >  a.jpg
+
+
+Disaable sandbox
+https://github.com/microsoft/vscode/blob/main/src/vs/workbench/electron-sandbox/desktop.contribution.ts
+
+
+cline API
+https://github.com/cline/cline/blob/b3b074d90a084b1ebe2d3cd70d75b4a32ac8521e/src/exports/README.md?plain=1#L29
+https://github.com/cline/cline/commit/d4f15de1998de2fab588d59c0acb2b24d53ea8e5#diff-d99bd53a34eb20844a9bee42d2f32a28c8ea946a59e5f1449cb9725c065bcdaa
+
+
+https://github.com/TrueCrimeAudit/AutoCline
+https://github.com/quantum-box/headless-cline
+
+https://github.com/mrexodia/user-feedback-mcp

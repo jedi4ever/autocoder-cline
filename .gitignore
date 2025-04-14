@@ -1,0 +1,5 @@
+vscode-plugins/
+vscode-plugins.ok/
+dist/
+workspaces/
+.vscode/

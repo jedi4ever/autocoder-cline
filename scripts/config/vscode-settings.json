@@ -1,0 +1,9 @@
+{
+    "remoteControl.host": "0.0.0.0",
+    "workbench.startupEditor": "newUntitledFile",
+    "security.workspace.trust.untrustedFiles": "open",
+    "security.workspace.trust.enabled": false,
+    "security.workspace.trust.banner": "never",
+    "workbench.colorTheme": "Default High Contrast Light"
+}
+
