@@ -143,11 +143,6 @@
 				"category": "Cline"
 			},
 			{
-				"command": "cline.autocoder.setInstructions",
-				"title": "Set instructions",
-				"category": "Cline"
-			},
-			{
 				"command": "cline.autocoder.disableNotifications",
 				"title": "Disable notifications",
 				"category": "Cline"

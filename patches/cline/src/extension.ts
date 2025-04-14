@@ -468,7 +468,9 @@ export function activate(context: vscode.ExtensionContext) {
 		})
 	)
 
-		
+	// https://docs.cline.bot/improving-your-prompting-skills/prompting	
+	// we can use .clinerules (file or directory)
+	/*
 	// set instructions
 	context.subscriptions.push(
 		vscode.commands.registerCommand("cline.autocoder.setInstructions", async () => {
@@ -480,6 +482,7 @@ export function activate(context: vscode.ExtensionContext) {
 			await sidebarWebview.controller.postMessageToWebview({ type: "didUpdateSettings" })
 		})
 	)
+	*/
 	
 	// all auto approval
 	context.subscriptions.push(

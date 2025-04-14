@@ -88,36 +88,37 @@ time.sleep(1)
 #t = sender.text("ls -l\n")
 #print(t)
 
-
+click_delay = 0.3
 def setup():
+    
     # close the current window
     r = sender.hotkey("ctrl", "w")
     print(r)
 
-    time.sleep(1)
+    time.sleep(click_delay)
     settings = [
         "cline.autocoder.yoloMode",
         "cline.autocoder.disableNotifications",
         "cline.autocoder.enableAnthropicProvider",
-        "cline.autocoder.setInstructions",
+#        "cline.autocoder.setInstructions",
         "cline.autocoder.disableTelemetry"
     ]
-    for i in settings:
-        r = sender.vscode(i)
+    for s in settings:
+        r = sender.vscode(s)
         print(r)
-        time.sleep(1)
+        time.sleep(click_delay)
 
     v = sender.vscode("cline.autocoder.setAnthropicKey")
-    time.sleep(1)
+    time.sleep(click_delay)
 
     #import os
     #api_key = os.environ.get("ANTHROPIC_API_KEY")
     api_key = "sk-"
     s = sender.text(api_key+"\n")
     print(s)
-    time.sleep(1)
+    time.sleep(click_delay)
     v = sender.vscode("cline.autocoder.setAnthropicModel")
-    time.sleep(1)
+    time.sleep(click_delay)
     s = sender.text("claude-3-5-sonnet-20241022\n")
 
     # cline.autocoder.setAnthropicModel
@@ -125,17 +126,17 @@ def setup():
 
     v = sender.vscode("workbench.action.terminal.new")
     print(v)
-    time.sleep(1)
+    time.sleep(click_delay)
 
     z = sender.text("code -a --no-sandbox /project\n")
     print(z)
-    time.sleep(3)
+    time.sleep(3*click_delay)
 
     # set focus on cline
     # error sending multiple commands ??
     v = sender.vscode("workbench.view.extension.claude-dev-ActivityBar")
     print(v)
-    time.sleep(1)
+    time.sleep(click_delay)
 
 
 def set_theme():
@@ -171,6 +172,8 @@ task_file = "task.md"
 task = None
 with open(task_file, "r", encoding="utf-8") as f:
     task = f.read()
+
+# .clinerules
 
 if (task):
     print("task read from file")
